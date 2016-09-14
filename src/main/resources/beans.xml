@@ -6,6 +6,11 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/task
 		http://www.springframework.org/schema/task/spring-task.xsd">
+		
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.h2.Driver"/>
+		<property name="url" value="jdbc:h2:~/tmp/filedb"/>
+	</bean>
 
 	<bean id="ftpSession" class="eu.cisong.ftp.FTPSession" init-method="onInit" destroy-method="onDestroy">
 		<property name="ftpHost" value="datafeeds.nationalrail.co.uk"/>
@@ -22,10 +27,14 @@
 		<property name="scanLocalDir" value="true"/>
 	</bean>
 	
-	<task:scheduled-tasks scheduler="myScheduler">
+	<bean id="fileChecker" class="eu.cisong.file.FileChecker" init-method="onInit" destroy-method="onDestroy">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<task:scheduled-tasks scheduler="mainScheduler">
 		<task:scheduled ref="ftpScheduler" method="toInvoke" fixed-rate="3000"/>
 	</task:scheduled-tasks>
 	
-	<task:scheduler id="myScheduler" pool-size="10"/>
+	<task:scheduler id="mainScheduler" pool-size="1"/>
 	
 </beans>

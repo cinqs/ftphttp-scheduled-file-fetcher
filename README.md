@@ -19,8 +19,10 @@ Using SpringBoot to retrieve files from FTP server, scheduled, configurable, and
 - Apache Commons Net FTPClient and FTPHTTPClient
 - Spring Boot
 - Spring Task
+- Spring JDBC
 - Maven (if you want, add gradle as you like)
 - Apache Commons IO
+- H2 database
 
 ## Start
 
