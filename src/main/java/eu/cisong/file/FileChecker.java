@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -29,12 +30,28 @@ public class FileChecker {
 		return dbFileList.size() == 1? true:false;
 	}
 	
+	public boolean check(FTPFile file){
+		String sql = "SELECT * FROM file_list WHERE name=? and last_modified=?";
+		List<DBFile> dbFileList = jt.query(sql, new Object[] {file.getName(), new Date(file.getTimestamp().getTimeInMillis())}, new DBFileMapper());
+		
+		return dbFileList.size() == 1? true:false;
+	}
+	
 	public void update(File file){
 		if(check(file)){
 			logger.warn("File: " + file.getName() + " is already existed");
 		} else {
 			String sql = "INSERT INTO file_list values (null, ?, ?)";
 			jt.update(sql, new Object[] {file.getName(), new Date(file.lastModified())});
+		}
+	}
+	
+	public void update(FTPFile file){
+		if(check(file)){
+			logger.warn("File: " + file.getName() + " is already existed");
+		} else {
+			String sql = "INSERT INTO file_list values (null, ?, ?)";
+			jt.update(sql, new Object[] {file.getName(), new Date(file.getTimestamp().getTimeInMillis())});
 		}
 	}
 	
