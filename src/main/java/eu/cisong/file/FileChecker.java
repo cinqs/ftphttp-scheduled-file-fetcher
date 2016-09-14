@@ -55,6 +55,11 @@ public class FileChecker {
 		}
 	}
 	
+	public List<DBFile> listDBFile(){
+		String sql = "SELECT * FROM file_list";
+		return jt.query(sql, new DBFileMapper());
+	}
+	
 	public void onDestroy(){}
 
 	public DataSource getDataSource() {

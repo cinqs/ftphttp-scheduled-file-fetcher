@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import eu.cisong.file.DBFileMapper.DBFile;
+
 public class FileCheckerUnitTest {
 
 	private static FileChecker fileChecker;
@@ -32,6 +34,13 @@ public class FileCheckerUnitTest {
 		fileChecker.update(file);
 		assertTrue(fileChecker.check(file));
 		file.delete();
+	}
+	
+	@Test
+	public void listFile(){
+		for(DBFile dbFile: fileChecker.listDBFile()) {
+			System.out.println(dbFile.getName());
+		}
 	}
 	
 	@AfterClass

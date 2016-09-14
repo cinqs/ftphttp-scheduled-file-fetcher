@@ -25,6 +25,10 @@
 	
 	<bean id="ftpScheduler" class="eu.cisong.ftp.FTPScheduler" init-method="onInit" destroy-method="onDestroy">
 		<property name="scanLocalDir" value="true"/>
+		<property name="localDir" value="/tmp/fetcher/"/>
+		<property name="remoteDir" value="/snapshot/"/>
+		<property name="filePattern" value="*.xml"/>
+		<property name="fileChecker" ref="fileChecker"/>
 	</bean>
 	
 	<bean id="fileChecker" class="eu.cisong.file.FileChecker" init-method="onInit" destroy-method="onDestroy">
