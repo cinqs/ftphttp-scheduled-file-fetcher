@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.SocketException;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPHTTPClient;
 import org.apache.log4j.Logger;
 
@@ -12,6 +13,10 @@ public class FTPSession {
 	private int ftpPort;
 	private String ftpUsername;
 	private String ftpPassword;
+	private String proxyHost;
+	private int proxyPort;
+	private String proxyUsername;
+	private String proxyPassword;
 	
 	private FTPClient ftpClient;
 	
@@ -19,16 +24,20 @@ public class FTPSession {
 	
 	@SuppressWarnings("unused")
 	public void onInit() throws SocketException, IOException{
-		if(true){
+		if(proxyPort < 1){
 			ftpClient = new FTPClient();
 		} else {
-			ftpClient = new FTPHTTPClient("proxy.host", 3128, "proxyUser", "proxyPWD");
+			ftpClient = new FTPHTTPClient(proxyHost, proxyPort, proxyUsername, proxyPassword);
 		}
 		
 		ftpClient.connect(ftpHost);
 		ftpClient.login(ftpUsername, ftpPassword);
 		logger.debug(ftpClient.getReplyString());
-		System.out.println("shit");
+	}
+	
+	public FTPFile[] listFiles(String dirPath, String filePattern) throws IOException{
+		ftpClient.changeWorkingDirectory(dirPath);
+		return ftpClient.listFiles();
 	}
 	
 	public void onDestroy(){}
@@ -59,5 +68,37 @@ public class FTPSession {
 
 	public void setFtpPassword(String ftpPassword) {
 		this.ftpPassword = ftpPassword;
+	}
+
+	public String getProxyHost() {
+		return proxyHost;
+	}
+
+	public void setProxyHost(String proxyHost) {
+		this.proxyHost = proxyHost;
+	}
+
+	public int getProxyPort() {
+		return proxyPort;
+	}
+
+	public void setProxyPort(int proxyPort) {
+		this.proxyPort = proxyPort;
+	}
+
+	public String getProxyUsername() {
+		return proxyUsername;
+	}
+
+	public void setProxyUsername(String proxyUsername) {
+		this.proxyUsername = proxyUsername;
+	}
+
+	public String getProxyPassword() {
+		return proxyPassword;
+	}
+
+	public void setProxyPassword(String proxyPassword) {
+		this.proxyPassword = proxyPassword;
 	}
 }

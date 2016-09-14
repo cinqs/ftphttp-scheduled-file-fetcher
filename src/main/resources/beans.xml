@@ -9,6 +9,10 @@
 		<property name="ftpPort" value="21"/>
 		<property name="ftpUsername" value="ftpuser"/>
 		<property name="ftpPassword" value="A!t4398htw4ho4jy"/>
+		<property name="proxyHost" value="proxy.host"/>
+		<property name="proxyPort" value="0"/>
+		<property name="proxyUsername" value="username"/>
+		<property name="proxyPassword" value="proxyPassword"/>
 	</bean>
 	
 </beans>
