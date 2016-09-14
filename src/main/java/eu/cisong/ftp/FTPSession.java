@@ -36,8 +36,20 @@ public class FTPSession {
 	}
 	
 	public FTPFile[] listFiles(String dirPath, String filePattern) throws IOException{
+		reConnect();
 		ftpClient.changeWorkingDirectory(dirPath);
-		return ftpClient.listFiles();
+		return ftpClient.listFiles(filePattern);
+	}
+	
+	public void reConnect() throws SocketException, IOException{
+		if(ftpClient.isConnected()){
+			///
+		} else {
+			logger.info("connection lost, trying to re-connect");
+			ftpClient.connect(ftpHost);
+			ftpClient.login(ftpUsername, ftpPassword);
+			logger.debug(ftpClient.getReplyString());
+		}
 	}
 	
 	public void onDestroy(){}

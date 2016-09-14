@@ -22,6 +22,6 @@ public class FTPSessionUnitTest {
 	
 	@Test
 	public void testListFile() throws IOException{
-		assertTrue(ftpSession.listFiles("/snapshot", null).length > 0);
+		assertTrue(ftpSession.listFiles("/snapshot", "*.gz").length > 0);
 	}
 }
