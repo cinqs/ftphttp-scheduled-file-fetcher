@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd">
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task.xsd">
 
 	<bean id="ftpSession" class="eu.cisong.ftp.FTPSession" init-method="onInit" destroy-method="onDestroy">
 		<property name="ftpHost" value="datafeeds.nationalrail.co.uk"/>
@@ -14,5 +17,15 @@
 		<property name="proxyUsername" value="username"/>
 		<property name="proxyPassword" value="proxyPassword"/>
 	</bean>
+	
+	<bean id="ftpScheduler" class="eu.cisong.ftp.FTPScheduler" init-method="onInit" destroy-method="onDestroy">
+		<property name="scanLocalDir" value="true"/>
+	</bean>
+	
+	<task:scheduled-tasks scheduler="myScheduler">
+		<task:scheduled ref="ftpScheduler" method="toInvoke" fixed-rate="3000"/>
+	</task:scheduled-tasks>
+	
+	<task:scheduler id="myScheduler" pool-size="10"/>
 	
 </beans>
