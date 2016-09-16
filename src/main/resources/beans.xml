@@ -27,8 +27,9 @@
 		<property name="scanLocalDir" value="true"/>
 		<property name="localDir" value="/tmp/fetcher/"/>
 		<property name="remoteDir" value="/snapshot/"/>
-		<property name="filePattern" value="*.xml"/>
+		<property name="filePattern" value="*.xml.gz"/>
 		<property name="fileChecker" ref="fileChecker"/>
+		<property name="ftpSession" ref="ftpSession"/>
 	</bean>
 	
 	<bean id="fileChecker" class="eu.cisong.file.FileChecker" init-method="onInit" destroy-method="onDestroy">

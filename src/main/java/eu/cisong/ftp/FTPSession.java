@@ -34,6 +34,8 @@ public class FTPSession {
 		}
 		
 		ftpClient.connect(ftpHost);
+		ftpClient.enterLocalPassiveMode();
+		ftpClient.enterRemotePassiveMode();
 		ftpClient.login(ftpUsername, ftpPassword);
 		logger.debug(ftpClient.getReplyString());
 	}

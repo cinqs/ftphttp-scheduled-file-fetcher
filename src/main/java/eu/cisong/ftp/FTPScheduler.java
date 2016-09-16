@@ -1,7 +1,9 @@
 package eu.cisong.ftp;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.log4j.Logger;
 
 import eu.cisong.file.FileChecker;
@@ -14,13 +16,26 @@ public class FTPScheduler {
 	private String remoteDir;
 	private String filePattern;
 	private FileChecker fileChecker;
+	private FTPSession ftpSession;
 
 	protected Logger logger = Logger.getLogger(FTPScheduler.class);
 	
-	public void toInvoke(){
+	public void toInvoke() throws IOException{
 		logger.info("invoked");
 		if (LOCAL_DIR_SCANNED){
-			///to scan ftp server
+			logger.info("to scan remote folder");
+			FTPFile[] ftpFiles = ftpSession.listFiles(remoteDir, filePattern);
+			logger.info("Remote got " + ftpFiles.length + " to check");
+			for(FTPFile ftpFile : ftpFiles) {
+				if(fileChecker.check(ftpFile)) {
+					logger.info("FTPFile: " + ftpFile.getName() + " already downloaded");
+				} else {
+					String fileName = ftpFile.getName();
+					String localFilePath = localDir + File.separator + fileName;
+					ftpSession.downloadFile(fileName, localFilePath);
+					fileChecker.update(ftpFile);
+				}
+			}
 		} else {
 			logger.info("to scan local folder");
 			scanLocalDir();
@@ -89,5 +104,13 @@ public class FTPScheduler {
 
 	public void setFileChecker(FileChecker fileChecker) {
 		this.fileChecker = fileChecker;
+	}
+
+	public FTPSession getFtpSession() {
+		return ftpSession;
+	}
+
+	public void setFtpSession(FTPSession ftpSession) {
+		this.ftpSession = ftpSession;
 	}
 }
